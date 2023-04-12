@@ -7,6 +7,7 @@ class Game:
     # 一般設定
     pygame.init()
     self.screen = pygame.display.set_mode((WIDTH,HEIGTH))
+    pygame.display.set_caption('交大歷險記')
     self.clock  = pygame.time.Clock()
   def run(self):
     while True:
@@ -20,4 +21,3 @@ class Game:
 if __name__ == '__main__':
   game = Game()
   game.run()
- 
