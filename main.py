@@ -1,5 +1,6 @@
 import pygame,sys
 from setting import *
+from level improt Level
 
 class Game:
   def __init__(self):
@@ -9,6 +10,8 @@ class Game:
     self.screen = pygame.display.set_mode((WIDTH,HEIGTH))
     pygame.display.set_caption('交大歷險記')
     self.clock  = pygame.time.Clock()
+    
+    self.level = Leve()
   def run(self):
     while True:
       for event in pygame.event.get():
@@ -16,6 +19,7 @@ class Game:
           pygame.quit()
           sys.exit()
      self.screen.fill('black')
+     self.level.run()
      pygame.display.update()
      self.clock.tick(FPS)
 if __name__ == '__main__':
