@@ -1,5 +1,5 @@
 import pygame,sys
-from setting import *
+from settings import *
 from level import Level
 
 class Game:
