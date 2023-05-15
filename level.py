@@ -19,19 +19,18 @@ class Level:
     	
     def create_map(self):
     	for row_index,row in enumerate(WORLD_MAP):
-    		for col_index, col in enumerate(WORLD_MAP):
+    		for col_index, col in enumerate(row):
     			x = col_index * TILESIZE
-    			y = col_index * TILESIZE
+    			y = row_index * TILESIZE
     			if col == 'x':
     				Tile((x,y),[self.visible_sprites,self.obstacle_sprites])
     			if col == 'p':
-    				Player((x,y),[self.visible_sprites],self.obstacle_sprites)
+    				self.player = Player((x,y),[self.visible_sprites],self.obstacle_sprites)
 
     def run(self):
         #update and draw the pygame
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
-        #debug(self.player.direction)
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
@@ -46,8 +45,10 @@ class YSortCameraGroup(pygame.sprite.Group):
     def custom_draw(self,player):
 
         # getting the offset
-        self.offset.x = player.rect.centrex - self.half_width
-        self.offset.y = player.rect.centrey - self.half_height
-        for sprite in self.sprites():
+        self.offset.x = player.rect.centerx - self.half_width
+        self.offset.y = player.rect.centery - self.half_height
+        
+        
+        for sprite in sorted(self.sprites(),key = lambda sprite: sprite.rect.centery):
             offset_pos = sprite.rect.topleft - self.offset 
-            self.display_surface.bilt(sprite.image,offset_pos)
+            self.display_surface.blit(sprite.image,offset_pos)
