@@ -4,6 +4,6 @@ from settings import *
 class Tile(pygame.sprite.Sprite):
     def __init__(self,pos,groups):
         super().__init__(groups)
-        self.image = pygame.image.load('../test.png').convert_alpha()
+        self.image = pygame.image.load('/home/kelvinyeh/group13_project/graphics/test.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
         
