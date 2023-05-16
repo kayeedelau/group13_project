@@ -3,7 +3,8 @@ from settings import *
 from tile import Tile
 from player import Player
 from debug import debug
-
+from support import *
+from random import choice
 class Level:
     def __init__(self):
     	# get the display surface
@@ -18,9 +19,28 @@ class Level:
     	self.create_map()
     	
     def create_map(self):
-        layout = {
-            'boundary': import_csv_layout('/home/kyd/test/Block_Block.csv')
+        layouts = {
+            'boundary': import_csv_layout('/home/kyd/test/Block_Block.csv'),
+            '01': import_csv_layout('/home/kyd/test/OB/Block_配件.csv'),
+            '02': import_csv_layout('/home/kyd/test/OB/Block_物件.csv')
+            
         }
+        #graphics = {
+        #    '01': import_folder('/home/kyd/test/OB')
+        #}
+        for style, layout in layouts.items():
+            for row_index, row in enumerate(layout):
+                for col_index, col in enumerate(row):
+                    if col != '-1':
+                        x = col_index * TILESIZE
+                        y = row_index * TILESIZE
+                        if style == 'boundary':
+                            Tile((x,y),[self.obstacle_sprites],'invisible')
+                        if style == '01':
+         #                   random_01_image = choice(graphics['01'])
+                            Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'01',)
+                        #if style == '02':
+                            
         self.player = Player((1000,300),[self.visible_sprites],self.obstacle_sprites)
         
 
