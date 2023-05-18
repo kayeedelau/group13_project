@@ -5,12 +5,13 @@ from player import Player
 from debug import debug
 from support import *
 from random import choice
+
 class Level:
     def __init__(self):
+    
     	# get the display surface
     	self.display_surface = pygame.display.get_surface()
 
-    	#
         # sprite group setup
     	self.visible_sprites = YSortCameraGroup()
     	self.obstacle_sprites = pygame.sprite.Group()
@@ -55,6 +56,7 @@ class Level:
         #update and draw the pygame
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
+        debug(self.player.status)
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
