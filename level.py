@@ -26,6 +26,7 @@ class Level:
             
         }
         graphics = {
+            ''
             
         }
         for style, layout in layouts.items():
