@@ -10,7 +10,7 @@ class Level:
     	# get the display surface
     	self.display_surface = pygame.display.get_surface()
 
-    	
+    	#
         # sprite group setup
     	self.visible_sprites = YSortCameraGroup()
     	self.obstacle_sprites = pygame.sprite.Group()
@@ -43,8 +43,12 @@ class Level:
                         if style == '02':
                             random_grass_image = choice(graphics['01'])
                             Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'02',random_grass_image)
+                        if style == 'ob': 
+                            surf = graphics['ob'][int(col)]
+                            Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'ob',surf)
                             
         self.player = Player((1000,300),[self.visible_sprites],self.obstacle_sprites)
+                            
         
 
     def run(self):
