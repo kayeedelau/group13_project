@@ -1,13 +1,14 @@
 import pygame
 from settings import *
 from support import import_folder
+from weapon import Weapon
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self,pos,groups,obstacle_sprites,create_attack):
+    def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack):
         super().__init__(groups)
         self.image = pygame.image.load('/home/kyd/group13_project/graphics/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
-        self.hitbox =self.rect.inflate(0,-26)
+        self.hitbox = self.rect.inflate(0,-26)
         
         #graphics setup
         self.import_player_assets()
@@ -21,7 +22,6 @@ class Player(pygame.sprite.Sprite):
         self.attacking = False
         self.attack_cooldown = 400
         self.attack_time = None
-        
         self.obstacle_sprites = obstacle_sprites
         
         #weapon
@@ -29,13 +29,13 @@ class Player(pygame.sprite.Sprite):
         self.destroy_attack = destroy_attack
         self.weapon_index = 0
         self.weapon = list(weapon_data.keys())[self.weapon_index]
-        self.can_switch_weapoon = True
+        self.can_switch_weapon = True
         self.weapon_switch_time = None
         self.switch_duration_cooldown = 200
         
     def import_player_assets(self):
         character_path = '/home/kyd/group13_project/graphics/01player/'
-        self.animations = {'up':[],'down':[],'left':[],'right':[],'up_idle':[],'down_idle':[],'left_idle':[],'right_idle':[]}
+        self.animations = {'up':[],'down':[],'left':[],'right':[],'up_idle':[],'down_idle':[],'left_idle':[],'right_idle':[],'up_attack':[],'down_attack':[],'left_attack':[],'right_attack':[]}
         
         for animation in self.animations.keys():
             full_path = character_path + animation
@@ -144,7 +144,7 @@ class Player(pygame.sprite.Sprite):
            self.frame_index =0
            
         #set the image
-        self.image =animation[int(self.frame_index)]
+        self.image = animation[int(self.frame_index)]
         self.rect = self.image.get_rect(center = self.hitbox.center)
         
     def update(self):
