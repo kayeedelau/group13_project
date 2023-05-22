@@ -64,4 +64,4 @@ class UI:
 
         self.show_exp(player.exp)
         self.weapon_overlay(player.weapon_index,not player.can_switch_weapon)
-        #self.selection_box(80,635) # magic
+        #self.selection_box(80,635) # magic #test
