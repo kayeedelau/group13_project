@@ -39,3 +39,10 @@ weapon_data = {
     'rapier' :{'cooldown': 50, 'damage':8 ,'graphic':'/home/kyd/group13_project/graphics/weapon/rapier/full.png'},
     'sai'    :{'cooldown': 80, 'damage':10,'graphic':'/home/kyd/group13_project/graphics/weapon/sai/full.png'}
     }
+    
+#magic
+magic_data ={
+ 'flame' : {'strength':5,'cost': 20, 'graphic':'/home/kyd/group13_project/graphics/flame/fire.png'},
+ 'heal' :  {'strength':20,'cost': 10, 'graphic':'/home/kyd/group13_project/graphics/heal/heal.png'}}
+ 
+ 
