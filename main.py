@@ -1,7 +1,28 @@
 import pygame
 import sys
+import json
 from settings import *
 from level import Level
+
+class GameSave:
+    def __init__(self, player_id):
+        self.player_id = player_id
+        self.filename = f"{player_id}.json"
+        
+    def save_game(self, skin , health, mana, position):
+        game_data ={
+            "player_id": self.player_id,
+            "skin": skin,
+            "health": health,
+            "mana": mana,
+            "position": position
+        }
+        with open(self.filename, 'w') as file:
+            json.dump(game_data, file)
+    def load_game(self):
+        with open(self.filename, "r") as file:
+            game_data = json.load(file)
+        return game_data["skin"],game_data["health"],game_data["mana"],game_data["position"]
 
 class Button:
     def __init__(self, text, font, x, y, width, height, color1, color2):
@@ -57,10 +78,44 @@ class Lobby:
                 if button.text == "START":
                     return "start"
                 elif button.text == "LOAD":
-                    return "load"
+                    return self.handle_load_button()
                 elif button.text == "QUIT":
                     return "quit"
+                    
+    def handle_load_button(self):
+        pygame.draw.rect(self.screen, BLACK, (0,0,WIDTH, HEIGHT))
+        font = pygame.font.SysFont(None, 60)
+        text_surface = font.render("Enter Player ID:", True, WHITE)
+        text_rect = text_surface.get_rect(center=(WIDTH //2, HEIGHT//2))
+        input_rect = pygame.Rect(text_rect.x, text_rect.y + 100, text_rect.width, 40)
+        input_active = True
+        player_id = ""
+        
+        while input_active:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        input_active = False
+                    elif event.key == pygame.K_BACKSPACE:
+                        player_id = player_id[:-1]
+                    else:
+                        player_id += event.unicode
 
+            pygame.draw.rect(self.screen, BLACK, (0, 0, WIDTH, HEIGHT))
+            pygame.draw.rect(self.screen, WHITE, input_rect, 2)
+            self.screen.blit(text_surface, text_rect)
+            font_input = pygame.font.SysFont(None, 40)
+            input_surface = font_input.render(player_id, True, WHITE)
+            self.screen.blit(input_surface, (input_rect.x + 5, input_rect.y + 5))
+            input_rect.w = max(200, input_surface.get_width() + 10)
+            pygame.display.flip()
+
+        return "load", player_id
+
+        
     def draw(self):
         self.screen.fill(BLACK)
         self.draw_title()
@@ -69,7 +124,7 @@ class Lobby:
         pygame.display.update()
 
     def draw_title(self):
-        title_font = pygame.font.SysFont(None, 64)
+        title_font = pygame.font.SysFont(None, 100)
         title_text = "DREAM ADVENTURE"
         title_render = title_font.render(title_text, True, WHITE)
         title_x = (WIDTH - title_render.get_width()) // 2

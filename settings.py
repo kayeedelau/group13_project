@@ -45,4 +45,19 @@ magic_data ={
  'flame' : {'strength':5,'cost': 20, 'graphic':'/home/kyd/group13_project/graphics/flame/fire.png'},
  'heal' :  {'strength':20,'cost': 10, 'graphic':'/home/kyd/group13_project/graphics/heal/heal.png'}}
  
+#enemy
+monster_data = {
+    'squid' :{'health':100, 'exp':100, 'dameage':20,'attack_type':'slash','attack_soun':'','speed':3,'resistance':3,'attack_radius':80,'notice_radius':360},
+    
+    'raccoon' :{'health':300, 'exp':250, 'dameage':40,'attack_type':'claw','attack_soun':'','speed':2,'resistance':3,'attack_radius':120,'notice_radius':400},
+    
+    'spirit' :{'health':100, 'exp':110, 'dameage':8,'attack_type':'thunder','attack_soun':'','speed':4,'resistance':3,'attack_radius':60,'notice_radius':350},
+    
+    'bamboo' :{'health':70, 'exp':120, 'dameage':6,'attack_type':'leaf_attack','attack_soun':'','speed':3,'resistance':3,'attack_radius':50,'notice_radius':300},
+
+}
+ 
+ 
+ 
+ 
  

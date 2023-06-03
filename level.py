@@ -43,7 +43,7 @@ class Level:
             'boundary': import_csv_layout('/home/kyd/group13_project/cool/01_Block.csv'),
             '01': import_csv_layout('/home/kyd/group13_project/cool/01_配件.csv'),
             '02': import_csv_layout('/home/kyd/group13_project/cool/01_物件.csv')
-            
+            #'entities': import_csv_layout('')
         }
         graphics = {
             '01':import_folder('/home/kyd/group13_project/graphics/pic'),
