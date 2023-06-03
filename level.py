@@ -7,6 +7,7 @@ from support import *
 from random import choice
 from weapon import Weapon
 from ui import UI
+from enemy import Enemy
 
 class Level:
     def __init__(self):
@@ -42,8 +43,9 @@ class Level:
         layouts = {
             'boundary': import_csv_layout('/home/kyd/group13_project/cool/01_Block.csv'),
             '01': import_csv_layout('/home/kyd/group13_project/cool/01_配件.csv'),
-            '02': import_csv_layout('/home/kyd/group13_project/cool/01_物件.csv')
-            #'entities': import_csv_layout('')
+            '02': import_csv_layout('/home/kyd/group13_project/cool/01_物件.csv'),
+            'entity': import_csv_layout('/home/kyd/group13_project/cool/01_enemy.csv'),
+            'player': import_csv_layout('/home/kyd/group13_project/cool/01_Player.csv') 
         }
         graphics = {
             '01':import_folder('/home/kyd/group13_project/graphics/pic'),
@@ -66,11 +68,11 @@ class Level:
                         if style == 'ob': 
                             surf = graphics['ob'][int(col)]
                             Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'ob',surf)
-                            
-        self.player = Player((2000,1430),[self.visible_sprites],self.obstacle_sprites,self.create_attack,self.destroy_attack,self.create_magic)
-                            
+                        if style == 'player':
+                            self.player = Player((x,y),[self.visible_sprites],self.obstacle_sprites,self.create_attack,self.destroy_attack,self.create_magic)
+                        if style == 'entity':
+                            Enemy('bamboo',(x,y),[self.visible_sprites],self.obstacle_sprites)         
         
-
     def run(self):
         #update and draw the pygame
         self.visible_sprites.custom_draw(self.player)
@@ -92,7 +94,12 @@ class YSortCameraGroup(pygame.sprite.Group):
         floor_surf = pygame.image.load('/home/kyd/group13_project/cool/03.png').convert()
         self.floor_surf = pygame.transform.scale(floor_surf,(1280*4,800*4))
         self.floor_rect = self.floor_surf.get_rect(topleft = (0,0))
-
+        
+    def enemy_update(self,player):
+        enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, 'sprite_type') if sprite.sprite_type == 'enemy']
+        for enemy in enemy_sprites:
+            enemy.enemy_update(player)
+            
     def custom_draw(self,player):
 
         # getting the offset

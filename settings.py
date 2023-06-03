@@ -47,13 +47,13 @@ magic_data ={
  
 #enemy
 monster_data = {
-    'squid' :{'health':100, 'exp':100, 'dameage':20,'attack_type':'slash','attack_soun':'','speed':3,'resistance':3,'attack_radius':80,'notice_radius':360},
+    'squid' :{'health':100, 'exp':100, 'dameage':20,'attack_type':'slash','attack_soun':'/home/kyd/group13_project/audio/attack/slash.wav','speed':3,'resistance':3,'attack_radius':80,'notice_radius':360},
     
-    'raccoon' :{'health':300, 'exp':250, 'dameage':40,'attack_type':'claw','attack_soun':'','speed':2,'resistance':3,'attack_radius':120,'notice_radius':400},
+    'raccoon' :{'health':300, 'exp':250, 'dameage':40,'attack_type':'claw','attack_soun':'/home/kyd/group13_project/audio/attack/claw.wav','speed':2,'resistance':3,'attack_radius':120,'notice_radius':400},
     
-    'spirit' :{'health':100, 'exp':110, 'dameage':8,'attack_type':'thunder','attack_soun':'','speed':4,'resistance':3,'attack_radius':60,'notice_radius':350},
+    'spirit' :{'health':100, 'exp':110, 'dameage':8,'attack_type':'thunder','attack_soun':'/home/kyd/group13_project/audio/attack/fireball.wav','speed':4,'resistance':3,'attack_radius':60,'notice_radius':350},
     
-    'bamboo' :{'health':70, 'exp':120, 'dameage':6,'attack_type':'leaf_attack','attack_soun':'','speed':3,'resistance':3,'attack_radius':50,'notice_radius':300},
+    'bamboo' :{'health':70, 'exp':120, 'dameage':6,'attack_type':'leaf_attack','attack_soun':'/home/kyd/group13_project/audio/attack/slash.wav','speed':3,'resistance':3,'attack_radius':50,'notice_radius':300},
 
 }
  
