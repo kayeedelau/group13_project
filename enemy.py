@@ -101,15 +101,15 @@ class Enemy(Entity):
 		else:
 			self.image.set_alpha(255)
 		
-		
 
 	def get_damage(self,player,attack_type):
+	
 		if self.vulnerable:
 			self.direction = self.get_player_distance_direction(player)[1]
 			if attack_type =='weapon':
 				self.health -= player.get_full_weapon_damage()
 			else:
-				pass
+				self.health -= player.get_full_magic_damage()
 			#magic damage
 			self.hit_time = pygame.time.get_ticks()
 			self.vulnerable = False
@@ -121,6 +121,7 @@ class Enemy(Entity):
 
 	def cooldown(self):
 		current_time = pygame.time.get_ticks()
+		
 		if not self.vulnerable:
 			if current_time - self.hit_time >= self.invincibility_duration:
 				self.vulnerable = True
