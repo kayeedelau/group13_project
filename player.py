@@ -7,7 +7,7 @@ from entity import Entity
 class Player(Entity):
 	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic):
 		super().__init__(groups)
-		self.image = pygame.image.load('./graphics/01player/down/down_0.png').convert_alpha()
+		self.image = pygame.image.load('./graphics/02/down/down_0.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
 		self.hitbox = self.rect.inflate(0,-26)
 		
@@ -52,7 +52,7 @@ class Player(Entity):
 		
 		
 	def import_player_assets(self):
-		character_path = './graphics/01player/'
+		character_path = './graphics/02/'
 		self.animations = {'up':[],'down':[],'left':[],'right':[],'up_idle':[],'down_idle':[],'left_idle':[],'right_idle':[],'up_attack':[],'down_attack':[],'left_attack':[],'right_attack':[]}
 		
 		for animation in self.animations.keys():
