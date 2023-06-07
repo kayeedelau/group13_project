@@ -141,6 +141,11 @@ class Game:
 		self.level = Level()
 		self.in_lobby = True
 		self.lobby = Lobby(self.screen)
+		
+		# sound
+		#main_sound = pygame.mixer.Sound('path')
+		#main_sound.set_volume(0.5)
+		#main_sound.play(loops = -1)
 
 	def run(self):
 		while True:
@@ -156,7 +161,9 @@ class Game:
 					if event.type == pygame.QUIT:
 						pygame.quit()
 						sys.exit()
-				self.screen.fill(BLACK)
+					if event.type == pygame.KEYDOWN:
+						if event.key == pygame.K_m:										self.level.toggle_menu()
+				self.screen.fill(WATER_COLOR)
 				self.level.run()
 				pygame.display.update()
 				self.clock.tick(FPS)
@@ -170,7 +177,7 @@ class Game:
 
 
 if __name__ == '__main__':
-	pygame.mixer.music.load("/home/kyd/group13_project/music/back.mp3")
+	pygame.mixer.music.load("/home/kelvinyeh/group13_project/music/back.mp3")
 	pygame.mixer.music.play(-1)
 	game = Game()
 	game.run()

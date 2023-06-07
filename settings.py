@@ -6,6 +6,7 @@ WIDTH = 1280
 HEIGHT = 800
 FPS = 60
 TILESIZE = 64
+HITBOX_OFFSET = {'player':-26,'ob':-40,'01':-10,'02':-10,'invisible':0}
 
 # ui
 BAR_HEIGHT = 20
@@ -25,6 +26,12 @@ WHITE = (0,0,0)
 BLACK = (255,255,255)
 color1 = (0,100,100)
 color2 = (100,150,0)
+
+# upgrade menu
+TEXT_COLOR_SELECTED = '#111111'
+BAR_COLOR = '#EEEEEE'
+BAR_COLOR_SELECTED = '#111111'
+UPGRADE_BG_COLOR_SELECTED = '#EEEEEE'
 
 # ui colors
 HEALTH_COLOR = 'red'
