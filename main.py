@@ -141,11 +141,13 @@ class Game:
 		self.level = Level()
 		self.in_lobby = True
 		self.lobby = Lobby(self.screen)
+		self.game_over = False
+		self.game_over_font = pygame.font.SysFont(None, 100)
 		
 		# sound
-		#main_sound = pygame.mixer.Sound('path')
-		#main_sound.set_volume(0.5)
-		#main_sound.play(loops = -1)
+		main_sound = pygame.mixer.Sound('./audio/main.ogg')
+		main_sound.set_volume(0.5)
+		main_sound.play(loops = -1)
 
 	def run(self):
 		while True:
@@ -162,13 +164,32 @@ class Game:
 						pygame.quit()
 						sys.exit()
 					if event.type == pygame.KEYDOWN:
-						if event.key == pygame.K_m:										self.level.toggle_menu()
-				self.screen.fill(WATER_COLOR)
+						if event.key == pygame.K_m:self.level.toggle_menu()
+				self.screen.fill(BLACK)
 				self.level.run()
 				pygame.display.update()
 				self.clock.tick(FPS)
 
+	def display_game_over(self):
+		game_over_text = self.game_over_font.render("Game Over", True, RED)
+		game_over_rect = game_over_text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+		self.screen.blit(game_over_text, game_over_rect)
+		pygame.display.update()
+		
+	def handle_player_death(self):
+		self.display_game_over()
+		pygame.time.delay(3000)  # Pause for 3 seconds before quitting the game
+		pygame.quit()
+		sys.exit()
+	def handle_player_update(self):
+		# ... Existing code for handling player update ...
+
+		if self.level.player.is_dead(): 
+			self.game_over = True
+			self.handle_player_death()	
 	def handle_lobby(self):
+		if self.game_over:
+			return
 		while self.in_lobby:
 			self.lobby.draw()
 			action = self.lobby.handle_events()
@@ -177,8 +198,6 @@ class Game:
 
 
 if __name__ == '__main__':
-	pygame.mixer.music.load("/home/kelvinyeh/group13_project/music/back.mp3")
-	pygame.mixer.music.play(-1)
 	game = Game()
 	game.run()
 

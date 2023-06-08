@@ -6,7 +6,12 @@ WIDTH = 1280
 HEIGHT = 800
 FPS = 60
 TILESIZE = 64
-HITBOX_OFFSET = {'player':-26,'ob':-40,'01':-10,'02':-10,'invisible':0}
+HITBOX_OFFSET = {
+	'player':-26,
+	'ob':-40,
+	'01':-10,
+	'02':-10,
+	'invisible':0}
 
 # ui
 BAR_HEIGHT = 20
@@ -22,8 +27,8 @@ WATER_COLOR = '#71ddee'
 UI_BG_COLOR = '#222222'
 UI_BORDER_COLOR = '#111111'
 TEXT_COLOR = '#EEEEEE'
-WHITE = (0,0,0)
-BLACK = (255,255,255)
+BLACK = (0,0,0)
+WHITE = (255,255,255)
 color1 = (0,100,100)
 color2 = (100,150,0)
 
@@ -50,7 +55,9 @@ weapon_data = {
 #magic
 magic_data ={
  'flame' : {'strength':5,'cost': 20, 'graphic':'./graphics/flame/fire.png'},
- 'heal' :  {'strength':20,'cost': 10, 'graphic':'./graphics/heal/heal.png'}}
+ 'heal' :  {'strength':20,'cost': 10, 'graphic':'./graphics/heal/heal.png'},
+ #'teleport': {'strength':0,'cost':30,'graphic':'./graphics/heal/heal.png'}
+ }
  
 #enemy
 monster_data = {

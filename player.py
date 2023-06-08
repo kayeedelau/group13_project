@@ -20,6 +20,7 @@ class Player(Entity):
 		self.attack_cooldown = 400
 		self.attack_time = None
 		self.obstacle_sprites = obstacle_sprites
+		self.death_sound = pygame.mixer.Sound('./audio/death.wav')
 		
 		#weapon
 		self.create_attack = create_attack
@@ -53,8 +54,8 @@ class Player(Entity):
 		self.invulnerability_duration = 500
 		
 		#import a sound
-		#self.weapon_attack_sound = pygame.mixer.Sound('path')
-		#self.weapon_attack_sound.set_volume(0.4)
+		self.weapon_attack_sound = pygame.mixer.Sound('./audio/sword.wav')
+		self.weapon_attack_sound.set_volume(0.4)
 		
 	def import_player_assets(self):
 		character_path = './graphics/02/'
@@ -92,7 +93,7 @@ class Player(Entity):
 				self.attacking = True
 				self.attack_time = pygame.time.get_ticks()
 				self.create_attack()
-				#self.weapon_attack_sound.play()
+				self.weapon_attack_sound.play()
 				
 			#magic input
 			if keys[pygame.K_LCTRL]:
@@ -165,7 +166,7 @@ class Player(Entity):
 		self.frame_index += self.animation_speed
 		if self.frame_index >= len(animation):
 			self.frame_index =0
-			
+
 		#set the image
 		self.image = animation[int(self.frame_index)]
 		self.rect = self.image.get_rect(center = self.hitbox.center)
@@ -188,6 +189,12 @@ class Player(Entity):
 		weapon_damage = weapon_data[self.weapon]['damage']
 		return base_damage + weapon_damage
 		
+	def is_dead(self):
+		if self.health <= 0:
+			self.kill()
+			self.death_sound.play()
+			return self.health<=0
+			
 	def get_full_magic_damage(self):
 		base_damage = self.stats['magic']
 		spell_damage = magic_data[self.magic]['strength']
@@ -202,6 +209,7 @@ class Player(Entity):
 	def update(self):
 		self.input()
 		self.cooldowns()
+		self.is_dead()
 		self.get_status()
 		self.animate()
 		self.move(self.stats['speed'])

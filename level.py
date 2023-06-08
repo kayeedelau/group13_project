@@ -47,6 +47,8 @@ class Level:
 		if style == 'heal':
 			self.magic_player.heal(self.player,strength,cost,[self.visible_sprites])
 		
+		if style == 'teleport':
+			self.magic_player.teleport(self.player,cost,[self.visible_sprites])
 		if style == 'flame':
 			self.magic_player.flame(self.player,cost,[self.visible_sprites,self.attack_sprites])
 	
@@ -57,15 +59,15 @@ class Level:
 
 	def create_map(self):
 		layouts = {
-			'boundary': import_csv_layout('/home/kelvinyeh/group13_project/cool/01_Block.csv'),
-			'01': import_csv_layout('/home/kelvinyeh/group13_project/cool/01_配件.csv'),
-			'02': import_csv_layout('/home/kelvinyeh/group13_project/cool/01_物件.csv'),
-			'entity': import_csv_layout('/home/kelvinyeh/group13_project/cool/01_enemy.csv'),
-			'player': import_csv_layout('/home/kelvinyeh/group13_project/cool/01_Player.csv') 
+			'boundary': import_csv_layout('./cool/01_Block.csv'),
+			'01': import_csv_layout('./cool/01_配件.csv'),
+			'02': import_csv_layout('./cool/01_物件.csv'),
+			'entity': import_csv_layout('./cool/01_enemy.csv'),
+			'player': import_csv_layout('./cool/01_Player.csv') 
 		}
 		graphics = {
-			'01':import_folder('/home/kelvinyeh/group13_project/graphics/pic'),
-			'ob':import_folder('/home/kelvinyeh/group13_project/graphics/pic')
+			'01':import_folder('./graphics/pic'),
+			'ob':import_folder('./graphics/pic')
 		}
 		for style, layout in layouts.items():
 			for row_index, row in enumerate(layout):
@@ -146,7 +148,7 @@ class YSortCameraGroup(pygame.sprite.Group):
 		self.offset = pygame.math.Vector2()
 		
 		#creating the floor
-		floor_surf = pygame.image.load('/home/kelvinyeh/group13_project/cool/03.png').convert()
+		floor_surf = pygame.image.load('./cool/03.png').convert()
 		self.floor_surf = pygame.transform.scale(floor_surf,(1280*4,800*4))
 		self.floor_rect = self.floor_surf.get_rect(topleft = (0,0))
 		
@@ -154,8 +156,6 @@ class YSortCameraGroup(pygame.sprite.Group):
 		enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, 'sprite_type') if sprite.sprite_type == 'enemy']
 		for enemy in enemy_sprites:
 			enemy.enemy_update(player)
-	
-	
 			
 	def custom_draw(self,player):
 
