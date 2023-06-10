@@ -1,7 +1,7 @@
 import pygame, sys, button
 from settings import *
 from level import Level
-
+from player import Player
 class Game:
 	def __init__(self):
 
@@ -13,7 +13,10 @@ class Game:
 		self.clock = pygame.time.Clock()
 		self.level = Level()
 		
-	def save_game_data(self,ID,skin,score,health,energy):
+	def save_game_data(self,ID,skin):
+		score  =self.level.get_exp()
+		health =self.level.get_health()
+		energy =self.level.get_energy()
 		file_name = f'{ID}.txt'
 		with open(file_name, 'w')as file:
 			file.write(f'Skin:{skin}\n')
@@ -96,7 +99,6 @@ class Game:
 								input_active= False
 								setting = False
 								run = True
-								self.save_game_data(number,1,0,100,50)
 							elif event.key == pygame.K_BACKSPACE:
 								# Remove the last character
 								number = number[:-1]
@@ -169,6 +171,7 @@ class Game:
 							pygame.time.delay(500)
 							run = False
 							lobby = True
+							self.save_game_data(number,1)
 				if not self.is_time_stopped:
 					self.level.run()
 				pygame.display.update()

@@ -123,6 +123,9 @@ class Player(Entity):
 					self.magic_index = 0 
 				self.magic =list(magic_data.keys())[self.magic_index]
 				
+	def game_save(self):
+		return self.exp,self.health,self.energy
+		
 	def get_status(self):
 		
 		#idel status

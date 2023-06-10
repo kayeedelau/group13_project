@@ -123,6 +123,13 @@ class Level:
 			
 	def add_exp(self,amount):
 		self.player.exp += amount
+		
+	def get_exp(self):
+		return self.player.exp
+	def get_health(self):
+		return self.player.health
+	def get_energy(self):
+		return self.player.energy
 	
 	def toggle_menu(self):
 		self.game_paused = not self.game_paused
