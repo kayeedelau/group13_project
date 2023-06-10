@@ -56,7 +56,7 @@ weapon_data = {
 magic_data ={
  'flame' : {'strength':5,'cost': 20, 'graphic':'./graphics/flame/fire.png'},
  'heal' :  {'strength':20,'cost': 10, 'graphic':'./graphics/heal/heal.png'},
- #'teleport': {'strength':0,'cost':30,'graphic':'./graphics/heal/heal.png'}
+ 'teleport': {'strength':0,'cost':30,'graphic':'./graphics/teleport.png'}
  }
  
 #enemy

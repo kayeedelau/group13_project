@@ -17,17 +17,14 @@ class MagicPlayer:
 			self.animation_player.create_particles('aura',player.rect.center,groups)
 			self.animation_player.create_particles('heal',player.rect.center,groups)
 		
-	def teleport(self,player,cost,groups):
-		random_pos = self.get_random_position()
+	def teleport(self,player,strength,cost,groups):
 		if player.energy >= cost:
 			player.energy -= cost
 			self.sounds['heal'].play()
-			player.rect.topleft = random_pos
-			print(random_pos)
-	def get_random_position(self):
-		x = randint(0,WIDTH)
-		y = randint(0,HEIGHT)
-		return x,y
+			self.animation_player.create_particles('aura',player.rect.center,groups)
+			self.animation_player.create_particles('heal',player.rect.center,groups)
+		
+
 		
 	def flame(self,player,cost,groups):
 		if player.energy >= cost:

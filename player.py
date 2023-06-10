@@ -3,7 +3,7 @@ from settings import *
 from support import import_folder
 from weapon import Weapon
 from entity import Entity
-
+from random import randint
 class Player(Entity):
 	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic,player_data):
 		super().__init__(groups)
@@ -33,7 +33,6 @@ class Player(Entity):
 		self.switch_duration_cooldown = 200
 		
 		#magic
-		
 		self.magic_index = 0
 		self.magic = list(magic_data.keys())[self.magic_index]
 		self.can_switch_magic = True
@@ -65,7 +64,12 @@ class Player(Entity):
 		for animation in self.animations.keys():
 			full_path = character_path + animation
 			self.animations[animation] = import_folder(full_path)
-
+			
+	def get_random_position(self):
+		x = randint(64,WIDTH-128)
+		y = randint(64,HEIGHT-128)
+		return x,y
+		
 	def input(self):
 		if not self.attacking:
 			keys = pygame.key.get_pressed()
@@ -104,7 +108,10 @@ class Player(Entity):
 				strength = list(magic_data.values())[self.magic_index]['strength']+ self.stats['magic']
 				cost = list(magic_data.values())[self.magic_index]['cost']
 				self.create_magic(style,strength,cost)
-				
+				if self.magic_index == 2:
+					random_pos = self.get_random_position()
+					self.change_pos(random_pos)
+					
 			if keys[pygame.K_q] and self.can_switch_weapon:
 				self.can_switch_weapon = False
 				self.weapon_switch_time = pygame.time.get_ticks()
@@ -204,6 +211,10 @@ class Player(Entity):
 		
 	def get_value_by_index(self,index):
 		return list(self.stats.values())[index]
+		
+	def change_pos(self,new_pos):
+		self.rect.topleft = new_pos
+		self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
 		
 	def get_cost_by_index(self,index):
 		return list(self.upgrade_cost.values())[index]
