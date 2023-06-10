@@ -1,5 +1,0 @@
-This is a 2D game for Python OOP project.
-
-Author: KayeeDelau, YehKelvin
-
-Language: Python(100%)
