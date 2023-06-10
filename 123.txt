@@ -1,6 +1,0 @@
-Skin:1
-score:500
-health:37
-energy:26.3199999999988
-pos:(3435, 202)
-speed:5
