@@ -13,12 +13,16 @@ from magic import MagicPlayer
 from upgrade import Upgrade
 
 class Level:
-	def __init__(self):
+	def __init__(self,file_name):
 
 		# get the display surface
 		self.display_surface = pygame.display.get_surface()
 		self.game_paused = False
 
+		# setting
+		self.player_data = file_name
+		
+		
 		# sprite group setup
 		self.visible_sprites = YSortCameraGroup()
 		self.obstacle_sprites = pygame.sprite.Group()
@@ -27,7 +31,6 @@ class Level:
 		self.current_attack = None
 		self.attack_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
-		
 		#sprite setup
 		self.create_map()
 
@@ -87,7 +90,8 @@ class Level:
 							surf = graphics['ob'][int(col)]
 							Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'ob',surf)
 						if style == 'player':
-							self.player = Player((x,y),[self.visible_sprites],self.obstacle_sprites,self.create_attack,self.destroy_attack,self.create_magic)
+							pos = eval(self.player_data[4][1])
+							self.player = Player(pos,[self.visible_sprites],self.obstacle_sprites,self.create_attack,self.destroy_attack,self.create_magic,self.player_data)
 						if style == 'entity':
 							if col== '24': monster_name = "bamboo"
 							elif col=='30': monster_name= "spirit"
@@ -130,7 +134,10 @@ class Level:
 		return self.player.health
 	def get_energy(self):
 		return self.player.energy
-	
+	def get_pos(self):
+		return self.player.rect
+	def get_speed(self):
+		return self.player.speed
 	def toggle_menu(self):
 		self.game_paused = not self.game_paused
 

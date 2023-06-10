@@ -5,11 +5,12 @@ from weapon import Weapon
 from entity import Entity
 
 class Player(Entity):
-	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic):
+	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic,player_data):
 		super().__init__(groups)
 		self.image = pygame.image.load('./graphics/02/down/down_0.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
 		self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
+		self.player_data= player_data
 		
 		#graphics setup
 		self.import_player_assets()
@@ -43,10 +44,10 @@ class Player(Entity):
 		self.stats = {'health': 100, 'energy': 60, 'attack': 10, 'magic': 4, 'speed': 5}
 		self.max_stats = {'health': 300, 'energy': 140, 'attack': 20, 'magic': 10, 'speed': 10}
 		self.upgrade_cost = {'health': 100, 'energy': 100, 'attack': 100, 'magic': 100, 'speed': 100}
-		self.health = self.stats['health'] *0.5
-		self.energy = self.stats['energy'] *0.8
-		self.exp = 500
-		self.speed = self.stats['speed']
+		self.health = eval(self.player_data[2][1])
+		self.energy = eval(self.player_data[3][1])
+		self.exp    = eval(self.player_data[1][1])
+		self.speed  = eval(self.player_data[5][1])
 	
 		#damage timer
 		self.vulnerable = True
@@ -64,7 +65,7 @@ class Player(Entity):
 		for animation in self.animations.keys():
 			full_path = character_path + animation
 			self.animations[animation] = import_folder(full_path)
-		
+
 	def input(self):
 		if not self.attacking:
 			keys = pygame.key.get_pressed()
@@ -123,8 +124,6 @@ class Player(Entity):
 					self.magic_index = 0 
 				self.magic =list(magic_data.keys())[self.magic_index]
 				
-	def game_save(self):
-		return self.exp,self.health,self.energy
 		
 	def get_status(self):
 		

@@ -1,0 +1,6 @@
+Skin:1
+score:500
+health:1
+energy:50
+pos:<rect(4736, 128, 64, 64)>
+speed:5
