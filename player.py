@@ -56,9 +56,9 @@ class Player(Entity):
 		#import a sound
 		self.weapon_attack_sound = pygame.mixer.Sound('./audio/sword.wav')
 		self.weapon_attack_sound.set_volume(0.4)
-		
+			
 	def import_player_assets(self):
-		character_path = './graphics/skin/2/'
+		character_path = f'./graphics/skin/{self.player_data[0][1]}/'
 		self.animations = {'up':[],'down':[],'left':[],'right':[],'up_idle':[],'down_idle':[],'left_idle':[],'right_idle':[],'up_attack':[],'down_attack':[],'left_attack':[],'right_attack':[]}
 		
 		for animation in self.animations.keys():
@@ -224,5 +224,6 @@ class Player(Entity):
 		self.is_dead()
 		self.get_status()
 		self.animate()
+		self.import_player_assets()
 		self.move(self.stats['speed'])
 		self.energy_recovery()
