@@ -7,7 +7,7 @@ from random import randint
 class Player(Entity):
 	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic,player_data):
 		super().__init__(groups)
-		self.image = pygame.image.load('./graphics/02/down/down_0.png').convert_alpha()
+		self.image = pygame.image.load('./graphics/skin/2/down/down_0.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
 		self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
 		self.player_data= player_data
@@ -58,7 +58,7 @@ class Player(Entity):
 		self.weapon_attack_sound.set_volume(0.4)
 		
 	def import_player_assets(self):
-		character_path = './graphics/02/'
+		character_path = './graphics/skin/2/'
 		self.animations = {'up':[],'down':[],'left':[],'right':[],'up_idle':[],'down_idle':[],'left_idle':[],'right_idle':[],'up_attack':[],'down_attack':[],'left_attack':[],'right_attack':[]}
 		
 		for animation in self.animations.keys():
@@ -201,7 +201,6 @@ class Player(Entity):
 	def is_dead(self):
 		if self.health <= 0:
 			self.kill()
-			self.death_sound.play()
 			return self.health<=0
 			
 	def get_full_magic_damage(self):

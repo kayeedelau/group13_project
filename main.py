@@ -1,4 +1,4 @@
-import pygame, sys, button
+import pygame, sys, button, cv2
 from settings import *
 from level import Level
 from player import Player
@@ -11,8 +11,8 @@ class Game:
 		pygame.display.set_caption('Dream Adventure')
 		
 		self.clock = pygame.time.Clock()
-		self.level = Level([('Skin', '1'), ('score', '500'), ('health', '50'), ('energy', '50'), ('pos', '(4736,128)'), ('speed', '5')]
-)
+		self.level = Level([('Skin', '1'), ('score', '500'), ('health', '50'), ('energy', '50'), ('pos', '(4736,128)'), ('speed', '5')])
+		self.is_dead = False
 		
 	def save_game_data(self,ID,skin):
 	
@@ -30,6 +30,17 @@ class Game:
 			file.write(f'energy:{energy}\n')
 			file.write(f'pos:{pos}\n')
 			file.write(f'speed:{speed}\n')
+			
+	def death_check(self):
+		health = self.level.get_health()
+		if health <=0:
+			self.is_dead =True
+	
+	def skin_overlay(self,skin_index,has_switched):
+		bg_rect = self.selection_box(10,630,has_switched)
+		skin_surf = self.skin_graphics[skin_index]
+		skin_rect = skin_surf.get_rect(center = bg_rect.center)
+		self.display_surface.blit(skin_surf,skin_rect)
 	
 	def load_game_save(self,ID):
 		player=[]
@@ -48,11 +59,15 @@ class Game:
 		game_paused = False
 		menu_state= 'main'
 		
-		font = pygame.font.SysFont('Arial',100)
-		text = font.render('Dream Adventure',True,(255,255,255))
-		text_rect = text.get_rect(center=(WIDTH//2,70))
-		text1= font.render('Input your ID:',True,(255,255,255))
-		text1_rect = text.get_rect(center=(WIDTH/2,HEIGHT//3))
+		menu = pygame.image.load('./graphics/menu.png')
+		menu = pygame.transform.scale(menu,(400,125))
+		background = pygame.image.load('./cool/floor.png')
+		font = pygame.font.SysFont('Arial',50)
+		title = pygame.image.load('./graphics/Dream Adventure.png')
+		title = pygame.transform.scale(title,(720,240))
+		text1= font.render('Set your ID:',True,(255,255,255))
+		text2= font.render('Input your ID:',True,(255,255,255))
+		text1_rect = text1.get_rect(center=(400,400))
 		# pause control
 		self.is_time_stopped = False
 		
@@ -63,23 +78,26 @@ class Game:
 		start_img   = pygame.image.load('./graphics/start.png').convert_alpha()
 		load_img	= pygame.image.load('./graphics/load.png').convert_alpha()
 		quit_img	= pygame.image.load('./graphics/quit.png').convert_alpha()
+		start_img   = pygame.transform.scale(start_img,(400,125))
+		load_img    = pygame.transform.scale(load_img,(400,125))
+		quit_img    = pygame.transform.scale(quit_img,(400,125))
 		
 		#create button instances
-		start_button   = button.Button(WIDTH//2, HEIGHT//7*2, start_img, 1)
-		load_button	= button.Button(WIDTH//2, HEIGHT//7*4, load_img, 1)
+		start_button   = button.Button(WIDTH//2, HEIGHT//7*3, start_img, 1)
+		load_button	= button.Button(WIDTH//2, HEIGHT//7*4.5, load_img, 1)
 		quit_button	= button.Button(WIDTH//2, HEIGHT//7*6, quit_img, 1)
 
 		number = ""
 		game = True
-		font1 = pygame.font.Font(None, 36)
-		input_rect = pygame.Rect(WIDTH//2, HEIGHT//2, 200, 40)
-		input_active = True
+		font1 = pygame.font.Font(None, 70)
+		input_rect = pygame.Rect(WIDTH//2-50, HEIGHT//2-20, 200, 48)
 		
 		while game:
 			while lobby:
 				self.screen.fill(BLACK)
-				self.screen.blit(text,text_rect)
-				
+				self.screen.blit(background,(0,0))
+				self.screen.blit(title,(280,0))
+		
 				for event in pygame.event.get():
 					if event.type == pygame.QUIT:
 						pygame.quit()
@@ -128,7 +146,8 @@ class Game:
 			
 				# Render the screen
 				self.screen.fill((0, 0, 0))
-				self.screen.blit(text1,text1_rect)
+				self.screen.blit(background,(0,0))
+				self.screen.blit(text2,text1_rect)
 				pygame.draw.rect(self.screen, WHITE, input_rect, 2)
 				input_text = font1.render(number, True, WHITE)
 				self.screen.blit(input_text, (input_rect.x + 5, input_rect.y + 5))
@@ -152,6 +171,7 @@ class Game:
 			
 				# Render the screen
 				self.screen.fill((0, 0, 0))
+				self.screen.blit(background,(0,0))
 				self.screen.blit(text1,text1_rect)
 				pygame.draw.rect(self.screen, WHITE, input_rect, 2)
 				input_text = font1.render(number, True, WHITE)
@@ -160,17 +180,19 @@ class Game:
 	
 			# image loading
 			resume_img  = pygame.image.load('./graphics/resume.png').convert_alpha()
-			options_img = pygame.image.load('./graphics/option.png').convert_alpha()
 			quit_img	= pygame.image.load('./graphics/quit.png').convert_alpha()
 			audio_img   = pygame.image.load('./graphics/audio.png').convert_alpha()
 			audio_gray  = pygame.image.load('./graphics/audio_gray.png').convert_alpha()
-			back_img	= pygame.image.load('./graphics/back.png').convert_alpha()
 			
+			resume_img   = pygame.transform.scale(resume_img,(400,125))
+			quit_img     = pygame.transform.scale(quit_img,(400,125))
+			audio_img    = pygame.transform.scale(audio_img,(400,125))
+			audio_gray   = pygame.transform.scale(audio_gray,(400,125))
 			#create button instances
-			resume_button  = button.Button(WIDTH//2, HEIGHT//7*2, resume_img, 1)
+			resume_button  = button.Button(WIDTH//2, HEIGHT//7*3, resume_img, 1)
 			quit_button	= button.Button(WIDTH//2, HEIGHT//7*6, quit_img, 1)
-			audio_normal   = button.Button(WIDTH//2, HEIGHT//7*4, audio_img, 1)
-			audio_gray	 = button.Button(WIDTH//2, HEIGHT//7*4, audio_gray, 1)
+			audio_normal   = button.Button(WIDTH//2, HEIGHT//7*4.5, audio_img, 1)
+			audio_gray	 = button.Button(WIDTH//2, HEIGHT//7*4.5, audio_gray, 1)
 			
 			# audio control
 			self.is_mute = False
@@ -179,8 +201,23 @@ class Game:
 			main_sound = pygame.mixer.Sound('./audio/main.ogg')
 			main_sound.set_volume(0.5)
 			main_sound.play(loops = -1)
+			image = pygame.image.load('./graphics/GG.png')
+			image = pygame.transform.scale(image,(800,800))	
 				
 			while run:
+				while self.is_dead:
+					
+					self.screen.fill((255, 255, 255))
+					self.screen.blit(image,(240,0))
+					pygame.display.flip()
+					
+					if not self.is_mute:
+						main_sound.stop()
+					pygame.time.delay(3000)
+					
+					self.is_dead = False
+					lobby =True 
+					run = False
 				if not self.is_mute:
 					main_sound.set_volume(0.5)
 					audio_button = audio_normal
@@ -201,6 +238,7 @@ class Game:
 				if game_paused:
 					self.is_time_stopped = True
 					if menu_state == "main":
+						self.screen.blit(menu,(WIDTH//2-175,70))
 						if resume_button.draw(self.screen):
 							sfx.play()
 							pygame.time.delay(500)
@@ -216,8 +254,11 @@ class Game:
 							run = False
 							lobby = True
 							self.save_game_data(number,1)
+							if not self.is_mute:
+								main_sound.stop()
 				if not self.is_time_stopped:
 					self.level.run()
+				self.death_check()
 				pygame.display.update()
 				self.clock.tick(FPS)
 				
