@@ -182,19 +182,16 @@ class Game:
 				pygame.display.flip()
 						
 			while skin_sel:
-				keys = pygame.key.get_pressed()
-				
+				current_time = pygame.time.get_ticks()
 				for event in pygame.event.get():
 					if event.type == pygame.QUIT:
 						pygame.quit()
 						sys.exit()
 					elif not confirm:
+						keys = pygame.key.get_pressed()
 						image = pygame.image.load(f'./graphics/skin/{skin_index}/down_idle/down_0.png')
 						self.screen.blit(background,(0,0))
 						self.screen.blit(image,(WIDTH//2+200,HEIGHT//2-30))
-						
-					
-						current_time = pygame.time.get_ticks()
 						if not can_switch_skin:
 							if current_time - skin_time >= skin_cooldown:
 								can_switch_skin = True
@@ -205,17 +202,29 @@ class Game:
 								skin_index += 1
 							else:
 								skin_index = 1 
+							pygame.display.update()			
+							self.clock.tick(FPS)
+						if keys[pygame.K_LEFT] and can_switch_skin:
+							can_switch_skin = False
+							skin_time = pygame.time.get_ticks()
+							if skin_index >0 :
+								skin_index -= 1
+							else:
+								skin_index = 7
+							pygame.display.update()			
+							self.clock.tick(FPS) 
 						if keys[pygame.K_SPACE]:
-							confirm = True
-							run = True
 							skin_sel= False
 							self.level.player_data[0][1]= skin_index
+							confirm = True
+							run = True
+							
 				# Render the screen
 				self.screen.blit(text3,text1_rect)
 				self.screen.blit(text4,(WIDTH//2-200,HEIGHT//7*6))
 				pygame.draw.rect(self.screen,(255,255,255),(WIDTH//2+190,HEIGHT//2-40,84,84),3)
 				pygame.display.update()			
-				
+				self.clock.tick(FPS)
 			# image loading
 			resume_img  = pygame.image.load('./graphics/resume.png').convert_alpha()
 			quit_img	= pygame.image.load('./graphics/quit.png').convert_alpha()
