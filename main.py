@@ -9,13 +9,12 @@ class Game:
 		pygame.init()
 		self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
 		pygame.display.set_caption('Dream Adventure')
-		
 		self.clock = pygame.time.Clock()
-		self.level = Level([('Skin', '1'), ('score', '500'), ('health', '50'), ('energy', '50'), ('pos', '(4736,128)'), ('speed', '5')])
+		self.level = Level([['Skin', '1'], ('score', '500'), ('health', '50'), ('energy', '50'), ('pos', '(4736,128)'), ('speed', '5')])
 		self.is_dead = False
 		
-	def save_game_data(self,ID,skin):
-	
+	def save_game_data(self,ID):
+		skin   =self.level.player_data[0][1]
 		score  =self.level.get_exp()
 		health =self.level.get_health()
 		energy =self.level.get_energy()
@@ -35,13 +34,7 @@ class Game:
 		health = self.level.get_health()
 		if health <=0:
 			self.is_dead =True
-	
-	def skin_overlay(self,skin_index,has_switched):
-		bg_rect = self.selection_box(10,630,has_switched)
-		skin_surf = self.skin_graphics[skin_index]
-		skin_rect = skin_surf.get_rect(center = bg_rect.center)
-		self.display_surface.blit(skin_surf,skin_rect)
-	
+
 	def load_game_save(self,ID):
 		player=[]
 		with open(f'{ID}.txt','r') as file:
@@ -55,6 +48,13 @@ class Game:
 		lobby = True
 		setting = False
 		loading =False
+		game = True
+		skin_sel = False
+		can_switch_skin = True
+		confirm = False
+		skin_index =1	
+		skin_cooldown=400
+		
 		# menu setting
 		game_paused = False
 		menu_state= 'main'
@@ -68,6 +68,9 @@ class Game:
 		text1= font.render('Set your ID:',True,(255,255,255))
 		text2= font.render('Input your ID:',True,(255,255,255))
 		text1_rect = text1.get_rect(center=(400,400))
+		text3= font.render('Choose your character:',True,(255,255,255))
+		text4= font.render('Press Space to Confirm',True,(150,150,150))
+		
 		# pause control
 		self.is_time_stopped = False
 		
@@ -88,7 +91,6 @@ class Game:
 		quit_button	= button.Button(WIDTH//2, HEIGHT//7*6, quit_img, 1)
 
 		number = ""
-		game = True
 		font1 = pygame.font.Font(None, 70)
 		input_rect = pygame.Rect(WIDTH//2-50, HEIGHT//2-20, 200, 48)
 		
@@ -109,7 +111,7 @@ class Game:
 					lobby =False
 					run = False
 					setting = True
-					self.save_game_data(number,1)
+					self.save_game_data(number)
 					
 				if load_button.draw(self.screen):
 					sfx.play()
@@ -126,6 +128,7 @@ class Game:
 					run=False
 					game = False
 				pygame.display.update()
+				
 			while loading:
 				for event in pygame.event.get():
 					if event.type == pygame.QUIT:
@@ -161,14 +164,14 @@ class Game:
 					elif event.type == pygame.KEYDOWN:
 							if event.key == pygame.K_RETURN:
 								setting = False
-								run = True
+								skin_sel = True
+								run= False
 							elif event.key == pygame.K_BACKSPACE:
 								# Remove the last character
 								number = number[:-1]
 							elif event.unicode.isnumeric():
 								# Append the numeric character to the number
 								number += event.unicode
-			
 				# Render the screen
 				self.screen.fill((0, 0, 0))
 				self.screen.blit(background,(0,0))
@@ -177,7 +180,42 @@ class Game:
 				input_text = font1.render(number, True, WHITE)
 				self.screen.blit(input_text, (input_rect.x + 5, input_rect.y + 5))
 				pygame.display.flip()
-	
+						
+			while skin_sel:
+				keys = pygame.key.get_pressed()
+				
+				for event in pygame.event.get():
+					if event.type == pygame.QUIT:
+						pygame.quit()
+						sys.exit()
+					elif not confirm:
+						image = pygame.image.load(f'./graphics/skin/{skin_index}/down_idle/down_0.png')
+						self.screen.blit(background,(0,0))
+						self.screen.blit(image,(WIDTH//2+200,HEIGHT//2-30))
+						
+					
+						current_time = pygame.time.get_ticks()
+						if not can_switch_skin:
+							if current_time - skin_time >= skin_cooldown:
+								can_switch_skin = True
+						if keys[pygame.K_RIGHT] and can_switch_skin:
+							can_switch_skin = False
+							skin_time = pygame.time.get_ticks()
+							if skin_index < 7 :
+								skin_index += 1
+							else:
+								skin_index = 1 
+						if keys[pygame.K_SPACE]:
+							confirm = True
+							run = True
+							skin_sel= False
+							self.level.player_data[0][1]= skin_index
+				# Render the screen
+				self.screen.blit(text3,text1_rect)
+				self.screen.blit(text4,(WIDTH//2-200,HEIGHT//7*6))
+				pygame.draw.rect(self.screen,(255,255,255),(WIDTH//2+190,HEIGHT//2-40,84,84),3)
+				pygame.display.update()			
+				
 			# image loading
 			resume_img  = pygame.image.load('./graphics/resume.png').convert_alpha()
 			quit_img	= pygame.image.load('./graphics/quit.png').convert_alpha()
@@ -253,7 +291,7 @@ class Game:
 							pygame.time.delay(500)
 							run = False
 							lobby = True
-							self.save_game_data(number,1)
+							self.save_game_data(number)
 							if not self.is_mute:
 								main_sound.stop()
 				if not self.is_time_stopped:
