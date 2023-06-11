@@ -44,6 +44,7 @@ class Upgrade:
 			current_time = pygame.time.get_ticks()
 			if current_time - self.selection_time >= 300:
 				self.can_move = True
+	
 	def create_items(self):
 		self.item_list = []
 

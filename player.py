@@ -1,15 +1,16 @@
 import pygame
-from settings import *
-from support import import_folder
-from weapon import Weapon
-from entity import Entity
-from random import randint
+from settings 	import *
+from support 	import import_folder
+from weapon 	import Weapon
+from entity 	import Entity
+from random 	import randint
+
 class Player(Entity):
-	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic,player_data):
+	def __init__(self,  pos,  groups,  obstacle_sprites, create_attack, destroy_attack, create_magic, player_data):
 		super().__init__(groups)
-		self.image = pygame.image.load('./graphics/skin/2/down/down_0.png').convert_alpha()
-		self.rect = self.image.get_rect(topleft = pos)
-		self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
+		self.image 		= pygame.image.load('./graphics/skin/2/down/down_0.png').convert_alpha()
+		self.rect 		= self.image.get_rect(topleft = pos)
+		self.hitbox 	= self.rect.inflate(-6, HITBOX_OFFSET['player'])
 		self.player_data= player_data
 		
 		#graphics setup
@@ -17,32 +18,32 @@ class Player(Entity):
 		self.status = 'down'
 		
 		#movement
-		self.attacking = False
+		self.attacking 		 = False
 		self.attack_cooldown = 400
-		self.attack_time = None
-		self.obstacle_sprites = obstacle_sprites
-		self.death_sound = pygame.mixer.Sound('./audio/death.wav')
+		self.attack_time 	 = None
+		self.obstacle_sprites= obstacle_sprites
+		self.death_sound 	 = pygame.mixer.Sound('./audio/death.wav')
 		
 		#weapon
-		self.create_attack = create_attack
-		self.destroy_attack = destroy_attack
-		self.weapon_index = 0
-		self.weapon = list(weapon_data.keys())[self.weapon_index]
-		self.can_switch_weapon = True
-		self.weapon_switch_time = None
-		self.switch_duration_cooldown = 200
+		self.create_attack 				= create_attack
+		self.destroy_attack 			= destroy_attack
+		self.weapon_index 				= 0
+		self.weapon 					= list(weapon_data.keys())[self.weapon_index]
+		self.can_switch_weapon 			= True
+		self.weapon_switch_time 		= None
+		self.switch_duration_cooldown 	= 200
 		
 		#magic
-		self.magic_index = 0
-		self.magic = list(magic_data.keys())[self.magic_index]
-		self.can_switch_magic = True
-		self.magic_switch_time = None
-		self.create_magic = create_magic
+		self.magic_index 		= 0
+		self.magic 				= list(magic_data.keys())[self.magic_index]
+		self.can_switch_magic 	= True
+		self.magic_switch_time 	= None
+		self.create_magic 		= create_magic
 		
 		#stats
-		self.stats = {'health': 100, 'energy': 60, 'attack': 10, 'magic': 4, 'speed': 5}
-		self.max_stats = {'health': 300, 'energy': 140, 'attack': 20, 'magic': 10, 'speed': 10}
-		self.upgrade_cost = {'health': 100, 'energy': 100, 'attack': 100, 'magic': 100, 'speed': 100}
+		self.stats 			= {'health': 100, 'energy': 60 , 'attack': 10 , 'magic': 4  , 'speed': 5}
+		self.max_stats 		= {'health': 300, 'energy': 140, 'attack': 20 , 'magic': 10 , 'speed': 10}
+		self.upgrade_cost 	= {'health': 100, 'energy': 100, 'attack': 100, 'magic': 100, 'speed': 100}
 		self.health = eval(self.player_data[2][1])
 		self.energy = eval(self.player_data[3][1])
 		self.exp    = eval(self.player_data[1][1])
@@ -50,7 +51,7 @@ class Player(Entity):
 	
 		#damage timer
 		self.vulnerable = True
-		self.hurt_time = None
+		self.hurt_time 	= None
 		self.invulnerability_duration = 500
 		
 		#import a sound
@@ -59,16 +60,18 @@ class Player(Entity):
 			
 	def import_player_assets(self):
 		character_path = f'./graphics/skin/{self.player_data[0][1]}/'
-		self.animations = {'up':[],'down':[],'left':[],'right':[],'up_idle':[],'down_idle':[],'left_idle':[],'right_idle':[],'up_attack':[],'down_attack':[],'left_attack':[],'right_attack':[]}
+		self.animations = {	'up':[], 'down':[], 'left':[], 'right':[],
+							'up_idle':[], 'down_idle':[], 'left_idle':[], 'right_idle':[],
+							'up_attack':[], 'down_attack':[], 'left_attack':[], 'right_attack':[]}
 		
 		for animation in self.animations.keys():
 			full_path = character_path + animation
 			self.animations[animation] = import_folder(full_path)
 			
 	def get_random_position(self):
-		x = randint(64,WIDTH-128)
-		y = randint(64,HEIGHT-128)
-		return x,y
+		x = randint(64, WIDTH-128)
+		y = randint(64, HEIGHT-128)
+		return x, y
 		
 	def input(self):
 		if not self.attacking:
@@ -93,25 +96,26 @@ class Player(Entity):
 			else:
 				self.direction.x = 0
 		
-			#attack input
+			# attack input
 			if keys[pygame.K_SPACE]:
 				self.attacking = True
 				self.attack_time = pygame.time.get_ticks()
 				self.create_attack()
 				self.weapon_attack_sound.play()
 				
-			#magic input
+			# magic input
 			if keys[pygame.K_LCTRL]:
 				self.attacking = True
 				self.attack_time = pygame.time.get_ticks()
 				style = list(magic_data.keys())[self.magic_index]
 				strength = list(magic_data.values())[self.magic_index]['strength']+ self.stats['magic']
 				cost = list(magic_data.values())[self.magic_index]['cost']
-				self.create_magic(style,strength,cost)
+				self.create_magic(style, strength, cost)
 				if self.magic_index == 2:
 					random_pos = self.get_random_position()
 					self.change_pos(random_pos)
-					
+			
+			# switch weapon	
 			if keys[pygame.K_q] and self.can_switch_weapon:
 				self.can_switch_weapon = False
 				self.weapon_switch_time = pygame.time.get_ticks()
@@ -120,7 +124,8 @@ class Player(Entity):
 				else:
 					self.weapon_index = 0 
 				self.weapon =list(weapon_data.keys())[self.weapon_index]
-				
+			
+			# switch magic	
 			if keys[pygame.K_e] and self.can_switch_magic:
 				self.can_switch_magic = False
 				self.magic_switch_time = pygame.time.get_ticks()
@@ -133,9 +138,7 @@ class Player(Entity):
 				
 		
 	def get_status(self):
-		
 		#idel status
-		
 		if self.direction.x ==0 and self.direction.y ==0:
 			if not 'idle' in self.status and not 'attack' in self.status:
 				self.status = self.status + '_idle'
@@ -145,15 +148,15 @@ class Player(Entity):
 			self.direction.y =0
 			if not 'attack' in self.status:
 				if 'idle' in self.status:
-					self.status = self.status.replace('_idle','_attack')
+					self.status = self.status.replace('_idle', '_attack')
 				else:
 					self.status = self.status + '_attack'
 		else:
 			if 'attack' in self.status:
-				self.status = self.status.replace('_attack','')
+				self.status = self.status.replace('_attack', '')
+	
 	def cooldowns(self):
-		current_time = pygame.time.get_ticks()
-		
+		current_time = pygame.time.get_ticks()	
 		if self.attacking:
 			if current_time - self.attack_time >= self.attack_cooldown+ weapon_data[self.weapon]['cooldown']:
 				self.attacking = False
@@ -168,6 +171,7 @@ class Player(Entity):
 		if not self.vulnerable:
 			if current_time - self.hurt_time >= self.invulnerability_duration:
 				self.vulnerable = True
+
 	def animate(self):
 		animation = self.animations[self.status]
 		
@@ -208,14 +212,14 @@ class Player(Entity):
 		spell_damage = magic_data[self.magic]['strength']
 		return base_damage + spell_damage
 		
-	def get_value_by_index(self,index):
+	def get_value_by_index(self, index):
 		return list(self.stats.values())[index]
 		
-	def change_pos(self,new_pos):
+	def change_pos(self, new_pos):
 		self.rect.topleft = new_pos
-		self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
+		self.hitbox = self.rect.inflate(-6, HITBOX_OFFSET['player'])
 		
-	def get_cost_by_index(self,index):
+	def get_cost_by_index(self, index):
 		return list(self.upgrade_cost.values())[index]
 		
 	def update(self):

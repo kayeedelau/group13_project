@@ -1,9 +1,8 @@
 import pygame
-from support import import_folder
-from random import choice
+from support 	import import_folder
+from random 	import choice
 
 class AnimationPlayer:
-
 	def __init__(self):
 		self.frames = {
 			# magic
@@ -37,9 +36,8 @@ class AnimationPlayer:
 				self.reflect_images(import_folder('./graphics/particles/leaf3')),
 				self.reflect_images(import_folder('./graphics/particles/leaf4')),
 				self.reflect_images(import_folder('./graphics/particles/leaf5')),
-				self.reflect_images(import_folder('./graphics/particles/leaf6'))
-				)
-			}
+				self.reflect_images(import_folder('./graphics/particles/leaf6')))}
+				
 	def reflect_images(self,frames):
 		new_frames = []
 		for frame in frames:
