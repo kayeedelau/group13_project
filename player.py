@@ -180,7 +180,7 @@ class Player(Entity):
 		self.image = animation[int(self.frame_index)]
 		self.rect = self.image.get_rect(center = self.hitbox.center)
 		
-		#filcker
+		#flicker
 		if not self.vulnerable:
 			alpha = self.wave_value()
 			self.image.set_alpha(alpha)
