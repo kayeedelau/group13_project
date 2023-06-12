@@ -1,4 +1,4 @@
-import pygame, sys, button, cv2
+import pygame, sys, button
 from settings 	import *
 from level 		import Level
 from player 	import Player
@@ -207,7 +207,7 @@ class Game:
 						if keys[pygame.K_LEFT] and can_switch_skin:
 							can_switch_skin = False
 							skin_time = pygame.time.get_ticks()
-							if skin_index >0 :
+							if skin_index >1 :
 								skin_index -= 1
 							else:
 								skin_index = 7
